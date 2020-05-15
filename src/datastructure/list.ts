@@ -77,6 +77,24 @@ function isNil<A>(as: List<A>): as is Nil {
 }
 
 /**
+ * JS.Arrayに変換する関数
+ *
+ * ```
+ * toArray(listOf(1, 2, 3)) // [1, 2, 3]
+ * toArray(listOf()) // []
+ * ```
+ *
+ * @param as
+ */
+export function toArray<A>(as: List<A>): Array<A> {
+  if (isCons(as)) {
+    return [as.head, ...toArray(as.tail)];
+  } else {
+    return [];
+  }
+}
+
+/**
  * sum関数
  *
  * ```
@@ -165,4 +183,32 @@ export function foldRight<A, B>(init: B, f: (a: A, b: B) => B, as: List<A>): B {
   } else {
     return init;
   }
+}
+
+/**
+ * append関数
+ *
+ * ```
+ * append(listOf(1, 2), listOf(3, 4)) // cons(1, cons(2, cons(3, cons(4, nil))))
+ * ```
+ *
+ * @param as1
+ * @param as2
+ */
+export function append<A>(as1: List<A>, as2: List<A>): List<A> {
+  return foldRight(as2, (a, b) => cons(a, b), as1);
+}
+
+/**
+ * flatMap関数
+ *
+ * ```
+ * flatMap((x) => listOf(x, x), listOf(1, 2, 3)) // cons(1, cons(1, cons(2, cons(2, cons(3, cons(3, nil))))))
+ * ```
+ *
+ * @param f
+ * @param as
+ */
+export function flatMap<A, B>(f: (a: A) => List<B>, as: List<A>): List<B> {
+  return foldRight(nil() as List<B>, (a, b) => append(f(a), b), as);
 }
