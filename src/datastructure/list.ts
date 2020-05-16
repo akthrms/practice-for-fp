@@ -21,14 +21,14 @@ type List<A> = Cons<A> | Nil;
 
 /**
  * Consのスマートコンストラクタ
- * @param t
- * @param h
+ * @param head
+ * @param tail
  */
-function cons<A>(t: A, h: List<A>): Cons<A> {
+function cons<A>(head: A, tail: List<A>): Cons<A> {
   return {
     _tag: "cons",
-    head: t,
-    tail: h,
+    head,
+    tail,
   };
 }
 
@@ -55,8 +55,8 @@ export function listOf<A>(...as: Array<A>): List<A> {
   if (as.length === 0) {
     return nil();
   } else {
-    const [h, ...t] = as;
-    return cons(h, listOf(...t));
+    const [head, ...tail] = as;
+    return cons(head, listOf(...tail));
   }
 }
 
