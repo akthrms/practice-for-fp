@@ -1,7 +1,23 @@
 /**
- * パイプラインのクラス
+ * パイプラインのインターフェース
  */
-class Pipeline<A> {
+interface Pipeline<A> {
+  /**
+   * 関数を適用して、パイプラインをつなげる
+   * @param f
+   */
+  then<B>(f: (a: A) => B): Pipeline<B>;
+
+  /**
+   * パイプラインを終了して、値を取り出す
+   */
+  end(): A;
+}
+
+/**
+ * パイプラインの実装クラス
+ */
+class PipelineImpl<A> implements Pipeline<A> {
   /**
    * コンストラクタ
    * @param value
@@ -13,7 +29,7 @@ class Pipeline<A> {
    * @param f
    */
   then<B>(f: (a: A) => B): Pipeline<B> {
-    return new Pipeline(f(this.value));
+    return new PipelineImpl(f(this.value));
   }
 
   /**
@@ -29,5 +45,5 @@ class Pipeline<A> {
  * @param value
  */
 export function start<A>(value: A): Pipeline<A> {
-  return new Pipeline(value);
+  return new PipelineImpl(value);
 }
