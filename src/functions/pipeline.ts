@@ -6,12 +6,12 @@ interface Pipeline<A> {
    * 関数を適用して、パイプラインをつなげる
    * @param f
    */
-  then<B>(f: (a: A) => B): Pipeline<B>;
+  pipe<B>(f: (a: A) => B): Pipeline<B>;
 
   /**
    * パイプラインを終了して、値を取り出す
    */
-  end(): A;
+  return(): A;
 }
 
 /**
@@ -28,14 +28,14 @@ class PipelineImpl<A> implements Pipeline<A> {
    * 関数を適用して、パイプラインをつなげる
    * @param f
    */
-  then<B>(f: (a: A) => B): Pipeline<B> {
+  pipe<B>(f: (a: A) => B): Pipeline<B> {
     return new PipelineImpl(f(this.value));
   }
 
   /**
    * パイプラインを終了して、値を取り出す
    */
-  end(): A {
+  return(): A {
     return this.value;
   }
 }
@@ -44,6 +44,6 @@ class PipelineImpl<A> implements Pipeline<A> {
  * パイプラインを開始する
  * @param value
  */
-export function start<A>(value: A): Pipeline<A> {
+export function Do<A>(value: A): Pipeline<A> {
   return new PipelineImpl(value);
 }
